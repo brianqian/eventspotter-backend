@@ -1,0 +1,37 @@
+{
+  "name": "eventspotter-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianqian/eventspotter-backend.git"
+  },
+  "author": "Brian Qian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brianqian/eventspotter-backend/issues"
+  },
+  "homepage": "https://github.com/brianqian/eventspotter-backend#readme",
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0"
+  }
+}
