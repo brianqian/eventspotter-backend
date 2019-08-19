@@ -8,7 +8,7 @@ const cache = require('../cache');
 const format = require('../utils/format');
 
 const HOSTNAME =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === 'asdf'
     ? 'http://localhost:3000'
     : 'https://eventspotter-react.qianbrian.now.sh';
 
