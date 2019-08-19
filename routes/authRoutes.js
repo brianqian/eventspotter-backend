@@ -7,10 +7,9 @@ const { catchAsyncError } = require('./middleware/errorMiddleware');
 const cache = require('../cache');
 const format = require('../utils/format');
 
+//second argument should be frontend URL
 const HOSTNAME =
-  process.env.NODE_ENV === 'asdf'
-    ? 'http://localhost:3000'
-    : 'https://eventspotter-react.qianbrian.now.sh';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000';
 
 router.get(
   '/token',
