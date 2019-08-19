@@ -4,37 +4,26 @@ const authController = require('../controllers/authController');
 const { getTokens, spotifyFetch } = require('../services/spotifyService');
 const ServerError = require('../ServerError');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
-
 const cache = require('../cache');
 const format = require('../utils/format');
 
 const HOSTNAME =
   process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3001'
+    ? 'http://localhost:3000'
     : 'https://eventspotter-react.qianbrian.now.sh';
 
-router.get('/login', (req, res) => {
-  const redirectURI = encodeURIComponent(`${HOSTNAME}/api/auth/spotifyLogin`);
-  const scopes = encodeURIComponent(
-    'user-read-private user-read-email user-library-read user-top-read'
-  );
-  res.redirect(
-    `https://accounts.spotify.com/authorize?response_type=code&client_id=${
-      process.env.SPOTIFY_CLIENT_ID
-    }&scope=${scopes}&redirect_uri=${redirectURI}`
-  );
-});
-
 router.get(
-  '/spotifyLogin',
+  '/token',
   catchAsyncError(async (req, res) => {
     /** *********************************
      * ACQUIRE AUTH CODE FROM SPOTIFY
      **********************************
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
-    const redirectURI = `${HOSTNAME}/api/auth/spotifyLogin`;
-    const code = req.query.code || null;
+    const redirectURI = `${HOSTNAME}/spotifyLogin`;
+    const code = req.query.code;
+    if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
+
     const params = {
       code,
       redirect_uri: redirectURI,
@@ -75,9 +64,6 @@ router.get(
       console.log('EDITING EXISTINg user', userInfo);
       authController.editUserInfo(userInfo);
     }
-
-    console.log('REDIRECTING TO LIBRARY FROM AUTH');
-    // res.redirect(`${HOSTNAME}/library`);
   })
 );
 
