@@ -10,7 +10,7 @@ module.exports = {
         console.log('GET USER RAW DATA', data);
         if (data.length === 0) resolve(false);
         if (data.length > 1)
-          reject(new ServerError('Auth - getUserByID', 500, `Users found: ${data.length}`));
+          reject(new ServerError(`Auth - getUserByID. Users found: ${data.length}`));
         // console.log('GET USER returned data', data);
         resolve(data[0]);
       });
@@ -28,7 +28,7 @@ module.exports = {
       'UPDATE user_info SET display_name = ?, img_URL = ?, refresh_token = ?, access_token = ?, access_token_expiration = ? WHERE user_id = ?',
       [displayName, imgURL, refreshToken, accessToken, accessTokenExpiration, spotifyID],
       (err, data) => {
-        if (err) throw new ServerError('Auth - editUserInfo', 500);
+        if (err) throw new ServerError('Auth - editUserInfo');
         console.log('EDIT USER INFO DATA:', data);
       }
     );
@@ -45,14 +45,14 @@ module.exports = {
       'INSERT INTO user_info (user_id, display_name, img_URL, refresh_token, access_token, access_token_expiration) VALUES (?,?,?,?,?,?)',
       [spotifyID, displayName, imgURL, refreshToken, accessToken, accessTokenExpiration],
       (err, data) => {
-        if (err) throw new ServerError('Auth - createUser', 500);
+        if (err) throw new ServerError('Auth - createUser');
         console.log('CREATE USER INFO DATA:', data);
       }
     );
   },
   deleteUser: spotifyID => {
     connection.query('DELETE FROM user_info WHERE user_id = ?', [spotifyID], (err, data) => {
-      if (err) throw new ServerError('Auth - deleteUser', 500);
+      if (err) throw new ServerError('Auth - deleteUser');
       console.log('IN DELETE USER,', data);
     });
   },
@@ -61,7 +61,7 @@ module.exports = {
       'UPDATE user_info SET total_songs = ? WHERE user_id = ?',
       [newTotal, spotifyID],
       (err, data) => {
-        if (err) throw new ServerError('Auth - editUserSongTotal', 500);
+        if (err) throw new ServerError('Auth - editUserSongTotal');
         console.log('in edit user song total', newTotal, data);
       }
     );

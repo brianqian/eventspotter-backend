@@ -10,7 +10,7 @@ const format = require('../../utils/format');
 
 const HOSTNAME =
   process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
+    ? 'http://localhost:3001'
     : 'https://eventspotter-react.qianbrian.now.sh';
 
 router.get('/login', (req, res) => {
@@ -58,7 +58,7 @@ router.get(
     const encodedToken = await jwt.sign({ userInfo }, process.env.JWT_SECRET_KEY, {
       expiresIn: '999d'
     });
-    res.cookie('userInfo', encodedToken, { maxAge: 1000 * 60 * 60 * 24 * 365 });
+    res.json({ encodedToken });
     // FORMATTING DATA FOR DB ENTRY/CACHE***********
     userInfo.accessToken = accessToken;
     userInfo.refreshToken = refreshToken;
@@ -77,7 +77,7 @@ router.get(
     }
 
     console.log('REDIRECTING TO LIBRARY FROM AUTH');
-    res.redirect(`${HOSTNAME}/library`);
+    // res.redirect(`${HOSTNAME}/library`);
   })
 );
 

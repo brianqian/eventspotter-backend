@@ -4,7 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const cacheMiddleware = require('./routes/middleware/cacheMiddleware');
-const { logError, handleError } = require('./routes/middleware/errorMiddleware');
+const { logAndHandleError } = require('./routes/middleware/errorMiddleware');
 const { validateCookie, updateSpotifyToken } = require('./api/routes/middleware/authMiddleware');
 
 const app = express();
@@ -19,8 +19,7 @@ app.use(updateSpotifyToken);
 
 app.use('/api', routes);
 
-app.use(logError);
-app.use(handleError);
+app.use(logAndHandleError);
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
