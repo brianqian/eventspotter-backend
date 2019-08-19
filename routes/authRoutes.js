@@ -5,8 +5,8 @@ const { getTokens, spotifyFetch } = require('../services/spotifyService');
 const ServerError = require('../ServerError');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
 
-const cache = require('../../cache');
-const format = require('../../utils/format');
+const cache = require('../cache');
+const format = require('../utils/format');
 
 const HOSTNAME =
   process.env.NODE_ENV === 'development'

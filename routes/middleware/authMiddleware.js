@@ -1,5 +1,5 @@
-const { decodeCookie } = require('../../../utils/format');
-const cache = require('../../../cache');
+const { decodeCookie } = require('../../utils/format');
+const cache = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
 const authController = require('../../controllers/authController');
 const ServerError = require('../../ServerError');

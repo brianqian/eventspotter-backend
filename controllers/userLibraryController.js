@@ -1,5 +1,5 @@
 const connection = require('../db');
-const format = require('../../utils/format');
+const format = require('../utils/format');
 const ServerError = require('../ServerError');
 
 module.exports = {

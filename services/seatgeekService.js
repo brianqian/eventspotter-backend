@@ -1,6 +1,6 @@
 const fetch = require('isomorphic-unfetch');
 const btoa = require('btoa');
-const format = require('../../utils/format');
+const format = require('../utils/format');
 const ServerError = require('../ServerError');
 
 const seatGeekFetch = async endpoint => {

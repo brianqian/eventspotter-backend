@@ -1,6 +1,6 @@
 const authController = require('../../controllers/authController');
-const cache = require('../../../cache');
-const format = require('../../../utils/format');
+const cache = require('../../cache');
+const format = require('../../utils/format');
 const { catchAsyncError } = require('./errorMiddleware');
 
 const cacheMiddleware = catchAsyncError(async (req, res, next) => {

@@ -1,7 +1,7 @@
 const fetch = require('isomorphic-unfetch');
 const btoa = require('btoa');
 const ServerError = require('../ServerError');
-const { JSONToURL } = require('../../utils/format');
+const { JSONToURL } = require('../utils/format');
 const libraryController = require('../controllers/libraryController');
 
 const spotifyFetch = async (endpoint, authToken) => {
