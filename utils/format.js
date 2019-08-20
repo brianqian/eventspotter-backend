@@ -57,14 +57,10 @@ const cookieToString = (cookie, cookieName) => {
   return result;
 };
 
-const decodeCookie = async cookie => {
+const verifyJWT = async cookie => {
   if (!cookie) return null;
-
   // console.log('IN DECODE COOKIE************. DECODING', cookie);
-  const encodedToken =
-    typeof cookie === 'string' ? cookieToString(cookie, 'userInfo') : cookie.userInfo;
-  if (!encodedToken) return null;
-  const result = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
+  const result = await jwt.verify(cookie, process.env.JWT_SECRET_KEY);
   if (!result) return null;
   // console.log('***********END DECODE COOKIE: ', userInfo);
 
@@ -117,7 +113,7 @@ const format = {
   spotifyLibraryToCache,
   dbLibraryToCache,
   cookieToString,
-  decodeCookie,
+  verifyJWT,
   parseSeatGeekEvents,
   formatArtistsToArray
 };

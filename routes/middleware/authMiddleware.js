@@ -1,4 +1,4 @@
-const { decodeCookie } = require('../../utils/format');
+const { verifyJWT } = require('../../utils/format');
 const cache = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
 const authController = require('../../controllers/authController');
@@ -10,7 +10,7 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('PATH:', req.path);
   console.log('HEADERS', req.headers);
   if (!req.headers['x-cookie']) return next();
-  const decodedCookie = await decodeCookie(req.headers['x-cookie']);
+  const decodedCookie = await verifyJWT(req.headers['x-cookie']);
   res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
   console.log('SPOTIFYID ', res.locals.spotifyID);
   next();
