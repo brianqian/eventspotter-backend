@@ -9,7 +9,9 @@ const format = require('../utils/format');
 
 //second argument should be frontend URL
 const HOSTNAME =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://eventspotter-react.qianbrian.now.sh';
 
 router.get(
   '/token',
@@ -19,7 +21,7 @@ router.get(
      **********************************
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
-    const redirectURI = `${HOSTNAME}/spotifyLogin`;
+    const redirectURI = `${HOSTNAME}/api/auth/spotify_login`;
     const code = req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
 
