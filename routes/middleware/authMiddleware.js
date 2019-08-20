@@ -7,8 +7,8 @@ const { catchAsyncError } = require('../middleware/errorMiddleware');
 
 const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
-  console.log(`COOKIE VALIDATION STARTING -- ${req.path}`);
-  console.log(`HEADERS -- ${req.headers}`);
+  console.log('PATH:', req.path);
+  console.log('HEADERS', req.headers);
   if (!req.headers.cookie) return next();
   const decodedCookie = await decodeCookie(req.headers.cookie);
   res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
