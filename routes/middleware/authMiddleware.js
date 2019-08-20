@@ -8,6 +8,7 @@ const { catchAsyncError } = require('../middleware/errorMiddleware');
 const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   console.log(`COOKIE VALIDATION STARTING -- ${req.path}`);
+  console.log(`HEADERS -- ${req.headers}`);
   if (!req.headers.cookie) return next();
   const decodedCookie = await decodeCookie(req.headers.cookie);
   res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
@@ -21,7 +22,7 @@ const requiresLogin = (req, res, next) => {
   console.log('✋*************************✋');
 
   const { spotifyID = null, accessToken = null } = res.locals;
-  console.log('RES.LOCALS IN requiresLogin MIDDLEWARE', res.locals);
+  console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
     console.log('🚫 🚫 🚫 ACCESS DENIED -- REROUTING 🚫 🚫 🚫');
     next(new ServerError(req.path, 401, `Not Authorized`));
