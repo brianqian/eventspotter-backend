@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:3000'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:3000*'], credentials: true }));
 app.use(validateCookie);
 app.use(cacheMiddleware);
 app.use(updateSpotifyToken);
