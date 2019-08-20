@@ -9,9 +9,8 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   console.log('PATH:', req.path);
   console.log('HEADERS', req.headers);
-  console.log('cookie', req.cookies);
-  if (!req.headers.cookie) return next();
-  const decodedCookie = await decodeCookie(req.headers.cookie);
+  if (!req.headers['x-cookie']) return next();
+  const decodedCookie = await decodeCookie(req.headers['x-cookie']);
   res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
   console.log('SPOTIFYID ', res.locals.spotifyID);
   next();
