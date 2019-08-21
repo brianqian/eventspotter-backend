@@ -67,8 +67,6 @@ router.get(
 );
 
 router.get('/', (req, res) => {
-  console.log(req.cookies);
-  console.log('AUTH ROUTES', req.headers);
   const { spotifyID = null } = res.locals;
   if (!spotifyID) return res.json({ spotifyID: '', displayName: '', imgURL: '' });
   const cachedUser = cache.get(spotifyID);
