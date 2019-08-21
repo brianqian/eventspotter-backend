@@ -48,15 +48,6 @@ const dbLibraryToCache = library => {
   }));
 };
 
-const cookieToString = (cookie, cookieName) => {
-  if (!cookie || !cookie.includes(cookieName)) return null;
-  const startIndex = cookie.indexOf(cookieName);
-  const endIndex = cookie.indexOf(';', startIndex);
-  let result = cookie.substring(startIndex, endIndex >= 0 ? endIndex : cookie.length + 1);
-  result = result.substring(result.indexOf('=') + 1);
-  return result;
-};
-
 const verifyJWT = async cookie => {
   if (!cookie) return null;
   // console.log('IN DECODE COOKIE************. DECODING', cookie);
@@ -112,7 +103,6 @@ const format = {
   dbProfileToCache,
   spotifyLibraryToCache,
   dbLibraryToCache,
-  cookieToString,
   verifyJWT,
   parseSeatGeekEvents,
   formatArtistsToArray
