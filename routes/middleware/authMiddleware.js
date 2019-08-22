@@ -9,7 +9,6 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   console.log('PATH:', req.path);
   console.log('HEADERS', req.headers);
-  console.log('CREDENTIALS', req.credentials);
   if (!req.headers['x-cookie']) return next();
   const decodedCookie = await verifyJWT(req.headers['x-cookie']);
   if (!decodedCookie) return next();
