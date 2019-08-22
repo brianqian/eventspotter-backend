@@ -50,10 +50,10 @@ const dbLibraryToCache = library => {
 
 const verifyJWT = async cookie => {
   if (!cookie) return null;
+  console.log('IN VERIFY JWT', cookie);
   // console.log('IN DECODE COOKIE************. DECODING', cookie);
   const result = await jwt.verify(cookie, process.env.JWT_SECRET_KEY);
   if (!result) return null;
-  // console.log('***********END DECODE COOKIE: ', userInfo);
 
   return result.userInfo;
 };

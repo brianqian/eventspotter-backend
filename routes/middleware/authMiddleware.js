@@ -12,6 +12,7 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('CREDENTIALS', req.credentials);
   if (!req.headers['x-cookie']) return next();
   const decodedCookie = await verifyJWT(req.headers['x-cookie']);
+  if (!decodedCookie) return next();
   res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
   console.log('SPOTIFYID ', res.locals.spotifyID);
   next();
