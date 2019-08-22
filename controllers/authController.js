@@ -6,7 +6,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user_info WHERE user_id = ?', [spotifyID], (err, data) => {
         console.log('*******GETTING USER:', spotifyID);
-        if (err) throw err;
+        if (err) throw ServerError('Auth - getUserByID', 500, err);
         console.log('GET USER RAW DATA', data);
         if (data.length === 0) resolve(false);
         if (data.length > 1)

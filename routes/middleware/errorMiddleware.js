@@ -5,7 +5,7 @@ const logAndHandleError = (err, req, res, next) => {
   console.error('Source: ', err.source);
   // console.error('Stack Trace: ', err.stack);
   console.error('Path:', req.path);
-  res.sendStatus(err.code);
+  res.sendStatus(err.code || 500);
   next(err);
 };
 
