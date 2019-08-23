@@ -1,6 +1,5 @@
 const { verifyJWT } = require('../../utils/format');
 const jwt = require('jsonwebtoken');
-
 const cache = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
 const authController = require('../../controllers/authController');
@@ -12,8 +11,9 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('PATH:', req.path);
   console.log('HEADERS', req.headers);
   console.log('req.headers.cookie', req.headers.cookie);
-  if (!req.headers['x-token']) return next();
-  const decodedToken = await jwt.verify(decodedToken, process.env.JWT_SECRET_KEY);
+  const encodedToken = req.headers && req.headers['x-token'];
+  if (!encodedToken) return next();
+  const decodedToken = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
   if (!decodedToken) return next();
   console.log('IN VALIDATE COOKIE. decoded token:', decodedToken);
   res.locals.spotifyID = decodedToken.spotifyID;
