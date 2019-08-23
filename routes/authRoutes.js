@@ -22,6 +22,7 @@ router.get(
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
     const redirectURI = `${HOSTNAME}/api/auth/spotify_login`;
+    console.log('REDIRECT URI: ', redirectURI);
     const code = req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
 
