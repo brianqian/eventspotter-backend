@@ -1,4 +1,6 @@
 const { verifyJWT } = require('../../utils/format');
+const jwt = require('jsonwebtoken');
+
 const cache = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
 const authController = require('../../controllers/authController');
