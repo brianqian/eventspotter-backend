@@ -10,8 +10,8 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   console.log('PATH:', req.path);
   console.log('HEADERS', req.headers);
-  console.log('req.headers.cookie', req.headers.cookie);
   const encodedToken = req.headers && req.headers['x-token'];
+  console.log('TCL: validateCookie -> encodedToken', encodedToken);
   if (!encodedToken) return next();
   const decodedToken = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
   if (!decodedToken) return next();
