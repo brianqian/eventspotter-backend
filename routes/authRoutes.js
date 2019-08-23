@@ -11,7 +11,7 @@ const format = require('../utils/format');
 const HOSTNAME =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000'
-    : 'https://eventspotter-react.qianbrian.now.sh';
+    : 'https://eventspotter.herokuapp.com/';
 
 router.get(
   '/token',
