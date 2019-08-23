@@ -9,6 +9,8 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   const encodedToken = req.headers && req.headers['x-token'];
   console.log('TCL: validateCookie -> encodedToken', encodedToken);
+  if (encodedToken) console.log('encoded token found', encodedToken);
+  if (!encodedToken) console.log('encoded token not found', encodedToken);
   if (!encodedToken) return next();
   const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
   if (!userInfo) return next();
