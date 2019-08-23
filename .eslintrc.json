@@ -3,7 +3,7 @@
     "browser": true,
     "commonjs": true,
     "es6": true,
-    "node": true,
+    "node": true
   },
   "extends": ["airbnb"],
   "globals": {
@@ -20,5 +20,6 @@
   "plugins": [],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-console": [0],
+    "no-console": [0]
+  }
 }

@@ -7,10 +7,9 @@ const { catchAsyncError } = require('./middleware/errorMiddleware');
 const cache = require('../cache');
 const format = require('../utils/format');
 
+//second argument should be frontend URL
 const HOSTNAME =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://eventspotter-react.qianbrian.now.sh';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000';
 
 router.get(
   '/token',
@@ -20,7 +19,7 @@ router.get(
      **********************************
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
-    const redirectURI = `${HOSTNAME}/spotifyLogin`;
+    const redirectURI = `${HOSTNAME}/api/auth/spotify_login`;
     const code = req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
 
@@ -77,10 +76,6 @@ router.get('/', (req, res) => {
     displayName,
     imgURL
   });
-});
-
-router.route('/test').get((req, res) => {
-  throw new ServerError(req.path, 500, 'test route');
 });
 
 module.exports = router;
