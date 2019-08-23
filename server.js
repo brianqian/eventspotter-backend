@@ -22,5 +22,6 @@ app.use('/api', routes);
 app.use(logAndHandleError);
 
 app.listen(PORT, () => {
+  console.log(`Starting server in ${process.env.NODE_ENV} mode`);
   console.log(`Backend ready on port: ${PORT}`);
 });
