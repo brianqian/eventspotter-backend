@@ -9,7 +9,9 @@ const format = require('../utils/format');
 
 //second argument should be frontend URL
 const HOSTNAME =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://eventspotter-react.qianbrian.now.sh';
 
 router.get(
   '/token',
