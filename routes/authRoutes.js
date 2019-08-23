@@ -78,8 +78,4 @@ router.get('/', (req, res) => {
   });
 });
 
-router.route('/test').get((req, res) => {
-  throw new ServerError(req.path, 500, 'test route');
-});
-
 module.exports = router;

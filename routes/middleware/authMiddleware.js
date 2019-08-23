@@ -1,4 +1,3 @@
-const { verifyJWT } = require('../../utils/format');
 const jwt = require('jsonwebtoken');
 const cache = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
@@ -8,16 +7,13 @@ const { catchAsyncError } = require('../middleware/errorMiddleware');
 
 const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
-  console.log('PATH:', req.path);
-  console.log('HEADERS', req.headers);
   const encodedToken = req.headers && req.headers['x-token'];
   console.log('TCL: validateCookie -> encodedToken', encodedToken);
   if (!encodedToken) return next();
   const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
   if (!userInfo) return next();
-  console.log('IN VALIDATE COOKIE. decoded token:', userInfo);
+  console.log('Cookie Validated:', userInfo);
   res.locals.spotifyID = userInfo.spotifyID;
-  console.log('SPOTIFYID ', res.locals.spotifyID);
   next();
 });
 
@@ -30,7 +26,7 @@ const requiresLogin = (req, res, next) => {
   console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
     console.log('🚫 🚫 🚫 ACCESS DENIED -- REROUTING 🚫 🚫 🚫');
-    next(new ServerError(req.path, 401, `Not Authorized`));
+    next(new ServerError(`requiresLogin -> ${req.path}`, 401, `Not Authorized`));
   } else {
     next();
   }
