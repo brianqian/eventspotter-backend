@@ -11,9 +11,10 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
   console.log('HEADERS', req.headers);
   console.log('req.headers.cookie', req.headers.cookie);
   if (!req.headers['x-token']) return next();
-  const decodedCookie = await verifyJWT(req.headers['x-token']);
-  if (!decodedCookie) return next();
-  res.locals.spotifyID = decodedCookie && decodedCookie.spotifyID;
+  const decodedToken = await jwt.verify(decodedToken, process.env.JWT_SECRET_KEY);
+  if (!decodedToken) return next();
+  console.log('IN VALIDATE COOKIE. decoded token:', decodedToken);
+  res.locals.spotifyID = decodedToken.spotifyID;
   console.log('SPOTIFYID ', res.locals.spotifyID);
   next();
 });
