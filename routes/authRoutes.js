@@ -9,7 +9,13 @@ const format = require('../utils/format');
 
 //second argument should be frontend URL
 const HOSTNAME =
+<<<<<<< HEAD
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000';
+=======
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://eventspotter.herokuapp.com/';
+>>>>>>> 7acc90d83a12d863806bb17bb01ff63757494d34
 
 router.get(
   '/token',
@@ -20,6 +26,10 @@ router.get(
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
     const redirectURI = `${HOSTNAME}/api/auth/spotify_login`;
+<<<<<<< HEAD
+=======
+    console.log('REDIRECT URI: ', redirectURI);
+>>>>>>> 7acc90d83a12d863806bb17bb01ff63757494d34
     const code = req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
 
