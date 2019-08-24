@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production FRONTEND_HOST=https://eventspotter.herokuapp.com  node server.js",
+    "start": "NODE_ENV=production FRONTEND_HOST=https://eventspotter-react.qianbrian.now.sh node server.js",
     "start:dev": "NODE_ENV=development FRONTEND_HOST=http://localhost:3000 nodemon server.js",
     "start:heroku": "NODE_ENV=development FRONTEND_HOST=http://eventspotter.herokuapp.com node server.js",
     "start:now": "NODE_ENV=development FRONTEND_HOST=https://eventspotter-react.qianbrian.now.sh node server.js"
