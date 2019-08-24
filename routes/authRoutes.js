@@ -7,12 +7,6 @@ const { catchAsyncError } = require('./middleware/errorMiddleware');
 const cache = require('../cache');
 const format = require('../utils/format');
 
-//second argument should be frontend URL
-const HOSTNAME =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://eventspotter.herokuapp.com/';
-
 router.get(
   '/token',
   catchAsyncError(async (req, res) => {
@@ -21,7 +15,7 @@ router.get(
      **********************************
      */
     console.log('***************NOW IN /spotifyLogin ROUTE');
-    const redirectURI = `${HOSTNAME}/api/auth/spotify_login`;
+    const redirectURI = `${process.env.FRONTEND_HOST}/api/auth/spotify_login`;
     console.log('REDIRECT URI: ', redirectURI);
     const code = req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
