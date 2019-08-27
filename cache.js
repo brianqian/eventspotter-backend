@@ -77,16 +77,10 @@ class LRUCache {
 
   get(key) {
     if (!this.cache[key]) return null;
-
     const { value } = this.cache[key];
     this.delete(key);
     this.set(key, value);
     return value;
-  }
-
-  getKey(spotifyID, key) {
-    const cachedUser = this.get(spotifyID);
-    return cachedUser[key];
   }
 
   delete(key) {
@@ -139,9 +133,19 @@ const cache = new LRUCache();
 //     accessTokenExpiration: string,
 //     totalSongs: string,
 //     library: [
-//       {id, dateAdded, title, artists},
-//       {id, dateAdded, title, artists},
-//       ...
+//       {
+//        id: string,
+//        dateAdded: string,
+//        title: string,
+//        artists: string,
+//        acousticness: number,
+//        danceability: number,
+//        energy: number,
+//        instrumentalness: number,
+//        loudness: number,
+//        tempo: number,
+//        valence: number
+//        },
 //     ],
 //   }
 // }

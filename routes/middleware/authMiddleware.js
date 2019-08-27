@@ -9,7 +9,7 @@ const validateToken = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   try {
     const encodedToken = req.headers && req.headers['x-token'];
-    console.log('TCL: validateToken -> encodedToken', encodedToken);
+    console.log('ENCODED TOKEN: ', encodedToken);
     if (!encodedToken) throw new Error(`No token received in headers: ${encodedToken}`);
     const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
     if (!userInfo) throw new Error(`JWT Verify failed. userInfo: ${userInfo}`);
@@ -17,7 +17,7 @@ const validateToken = catchAsyncError(async (req, res, next) => {
     res.locals.spotifyID = userInfo.spotifyID;
     next();
   } catch (err) {
-    console.error('validateToken error: ', err.message);
+    console.error('validateToken error-- ', err.message);
     return next();
   }
 });
@@ -26,11 +26,10 @@ const requiresLogin = (req, res, next) => {
   console.log('✋************************✋');
   console.log('requiresLogin MIDDLEWARE HIT ');
   console.log('✋*************************✋');
-
   const { spotifyID = null, accessToken = null } = res.locals;
   console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
-    console.log('🚫 🚫 🚫 ACCESS DENIED -- REROUTING 🚫 🚫 🚫');
+    console.log('🚫 🚫 🚫 ACCESS DENIED 🚫 🚫 🚫');
     next(new ServerError(`requiresLogin -> ${req.path}`, 401, `Not Authorized`));
   } else {
     next();
