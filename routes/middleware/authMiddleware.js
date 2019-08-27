@@ -5,11 +5,11 @@ const authController = require('../../controllers/authController');
 const ServerError = require('../../ServerError');
 const { catchAsyncError } = require('../middleware/errorMiddleware');
 
-const validateCookie = catchAsyncError(async (req, res, next) => {
+const validateToken = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   try {
     const encodedToken = req.headers && req.headers['x-token'];
-    console.log('TCL: validateCookie -> encodedToken', encodedToken);
+    console.log('TCL: validateToken -> encodedToken', encodedToken);
     if (!encodedToken) throw new Error(`No token received in headers: ${encodedToken}`);
     const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
     if (!userInfo) throw new Error(`JWT Verify failed. userInfo: ${userInfo}`);
@@ -17,7 +17,7 @@ const validateCookie = catchAsyncError(async (req, res, next) => {
     res.locals.spotifyID = userInfo.spotifyID;
     next();
   } catch (err) {
-    console.error('validateCookie error: ', err.message);
+    console.error('validateToken error: ', err.message);
     return next();
   }
 });
@@ -66,7 +66,7 @@ const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
 });
 
 module.exports = {
-  validateCookie,
+  validateToken,
   updateSpotifyToken,
   requiresLogin
 };

@@ -127,13 +127,23 @@ class LRUCache {
 }
 
 const cache = new LRUCache();
-// cache.set('a', 'a');
-// cache.set('c', 'c');
-// cache.set('d', 'd');
-// cache.getHead();
-// console.log(cache.get('a'));
-// cache.getHead();
-// cache.delete('c');
-// cache.getSize();
+
+//  cacheExample = {
+
+//   spotifyUserID: {
+//     spotifyID: string,
+//     displayName: string,
+//     imgURL: string,
+//     refreshToken: string,
+//     accessToken: string,
+//     accessTokenExpiration: string,
+//     totalSongs: string,
+//     library: [
+//       {id, dateAdded, title, artists},
+//       {id, dateAdded, title, artists},
+//       ...
+//     ],
+//   }
+// }
 
 module.exports = cache;
