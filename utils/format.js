@@ -1,14 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const JSONToURL = object => {
-  return Object.keys(object)
-    .map(key => {
-      return `${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`;
-    })
+const JSONToURL = (object) =>
+  Object.keys(object)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`)
     .join('&');
-};
 
-const dbProfileToCache = dbObject => {
+const dbProfileToCache = (dbObject) => {
   if (!dbObject) return false;
   const result = {
     spotifyID: dbObject.user_id,
@@ -17,23 +14,23 @@ const dbProfileToCache = dbObject => {
     refreshToken: dbObject.refresh_token,
     accessToken: dbObject.access_token,
     accessTokenExpiration: dbObject.access_token_expiration,
-    totalSongs: dbObject.total_songs
+    totalSongs: dbObject.total_songs,
   };
   return result;
 };
 
-const spotifyLibraryToCache = spotifyResp => {
+const spotifyLibraryToCache = (spotifyResp) => {
   console.log('FORMATTING LIB FOR CACHE', spotifyResp[0].track.name, spotifyResp.length);
-  return spotifyResp.map(song => ({
+  return spotifyResp.map((song) => ({
     id: song.track.id,
     dateAdded: song.added_at,
     title: song.track.name,
-    artist: song.track.artists.reduce((acc, artist) => [...acc, artist.name], []).join(', ')
+    artist: song.track.artists.reduce((acc, artist) => [...acc, artist.name], []).join(', '),
   }));
 };
 
-const dbLibraryToCache = library => {
-  return library.map(song => ({
+const dbLibraryToCache = (library) =>
+  library.map((song) => ({
     id: song.song_id,
     dateAdded: song.date_added,
     title: song.title,
@@ -44,11 +41,10 @@ const dbLibraryToCache = library => {
     instrumentalness: song.instrumentalness,
     loudness: song.loudness,
     tempo: song.tempo,
-    valence: song.valence
+    valence: song.valence,
   }));
-};
 
-const verifyJWT = async cookie => {
+const verifyJWT = async (cookie) => {
   if (!cookie) return null;
   console.log('IN VERIFY JWT', cookie);
   // console.log('IN DECODE COOKIE************. DECODING', cookie);
@@ -66,7 +62,7 @@ const formatArtistsToArray = (data, filterBy) => {
   } else {
     formattedArtists = [];
     data.forEach(({ track }) => {
-      track.artists.forEach(artist => {
+      track.artists.forEach((artist) => {
         formattedArtists.push(artist.name);
       });
     });
@@ -75,7 +71,7 @@ const formatArtistsToArray = (data, filterBy) => {
   return formattedArtists;
 };
 
-const parseSeatGeekEvents = event => {
+const parseSeatGeekEvents = (event) => {
   return {
     id: event.id,
     title: event.title,
@@ -92,9 +88,9 @@ const parseSeatGeekEvents = event => {
       zipcode: event.venue.postal_code,
       coordinates: {
         lat: event.venue.location.lat,
-        lon: event.venue.location.lon
-      }
-    }
+        lon: event.venue.location.lon,
+      },
+    },
   };
 };
 
@@ -105,7 +101,7 @@ const format = {
   dbLibraryToCache,
   verifyJWT,
   parseSeatGeekEvents,
-  formatArtistsToArray
+  formatArtistsToArray,
 };
 
 module.exports = format;

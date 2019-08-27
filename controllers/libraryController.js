@@ -2,7 +2,7 @@ const connection = require('../db');
 const ServerError = require('../ServerError');
 
 module.exports = {
-  getSong: songID =>
+  getSong: (songID) =>
     new Promise((resolve, reject) => {
       connection.query('SELECT * FROM library WHERE songID = ?', [songID], (err, data) => {
         if (err) reject(new ServerError('Library - getSong failed'));
@@ -11,7 +11,7 @@ module.exports = {
       });
     }),
 
-  setLibraryBasic: library => {
+  setLibraryBasic: (library) => {
     /**
      * library is an array of 50 or less songs from Spotify.
      * library = spotifyResp.items
@@ -31,7 +31,7 @@ module.exports = {
       }
     );
   },
-  setLibraryAdvanced: library => {
+  setLibraryAdvanced: (library) => {
     const insertArray = library.map(
       ({ acousticness, danceability, energy, instrumentalness, loudness, tempo, valence }) => [
         acousticness,

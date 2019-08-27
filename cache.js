@@ -52,7 +52,7 @@ class LRUCache {
 
   setLibraryFeatures(spotifyID, library) {
     const cachedUser = this.get(spotifyID);
-    library.forEach(song => {
+    library.forEach((song) => {
       let songObject = cachedUser.library[song.id];
       const updatedObject = {
         ...songObject,
@@ -62,7 +62,7 @@ class LRUCache {
         instrumentalness: song.instrumentalness,
         loudness: song.loudness,
         tempo: song.tempo,
-        valence: song.valence
+        valence: song.valence,
       };
       songObject = updatedObject;
     });

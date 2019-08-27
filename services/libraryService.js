@@ -23,7 +23,7 @@ const fullUpdate = async (spotifyID, accessToken) => {
  * Make a workaround that checks for differences.
  ********************* */
 
-const attemptPartialUpdate = async spotifyID => {
+const attemptPartialUpdate = async (spotifyID) => {
   console.log('CHECKING FOR PARTIAL UPDATE');
   const cachedUser = cache.get(spotifyID);
   const { accessToken, library: cacheLibrary } = cachedUser;
@@ -33,7 +33,7 @@ const attemptPartialUpdate = async spotifyID => {
   );
   const lastCachedSong = cacheLibrary[0];
   const lastCachedSongIndex = spotifyLibrary.items.findIndex(
-    item => item.track.id === lastCachedSong.id && item.added_at === lastCachedSong.dateAdded
+    (item) => item.track.id === lastCachedSong.id && item.added_at === lastCachedSong.dateAdded
   );
   const libraryHasChanged = spotifyLibrary.total !== cachedUser.totalSongs;
 

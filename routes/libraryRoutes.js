@@ -14,7 +14,7 @@ router.route('/all').get(
   catchAsyncError(async (req, res) => {
     /** ***********
      * This is the route hit by the library page.
-     * This route requires login so a valid token, spotifyID, and a valid accessToken can be assumed.
+     * This route requires login so a valid token, spotifyID, and a valid accessToken can be assumed
      *
      * /ALL'S RESPONSIBILITIES--
      *
@@ -44,7 +44,6 @@ router.route('/all').get(
       return res.json({ data: library });
       // }
     }
-
     console.log('RETURNING TO FRONT WITH', cacheLibrary[0], cacheLibrary.length);
     libraryService.attemptPartialUpdate(spotifyID, cachedUser);
     console.log('END OF /ALL******************');

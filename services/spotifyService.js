@@ -2,7 +2,6 @@ const fetch = require('isomorphic-unfetch');
 const btoa = require('btoa');
 const ServerError = require('../ServerError');
 const { JSONToURL } = require('../utils/format');
-const libraryController = require('../controllers/libraryController');
 
 const spotifyFetch = async (endpoint, authToken) => {
   let resp = await fetch(endpoint, {
@@ -37,12 +36,9 @@ const getSongs = async (accessToken, pages, offset = 0) => {
   const result = await Promise.all(promiseArr);
   const library = result.reduce((acc, resp) => [...acc, ...resp.items], [...firstFetch.items]);
   return { library, total: firstFetch.total };
-  // resolve(userLibrary);
-  // reject(new ServerError('spotify, getSongs'));
-  // });
 };
 
-const getTokens = async params => {
+const getTokens = async (params) => {
   const formattedParams = JSONToURL(params);
   console.log('***IN GET TOKENS**********', formattedParams);
   const encodedIDAndSecret = btoa(
@@ -67,7 +63,7 @@ const getTokens = async params => {
   return resp;
 };
 
-const updateAccessToken = async refreshToken => {
+const updateAccessToken = async (refreshToken) => {
   const params = {
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
