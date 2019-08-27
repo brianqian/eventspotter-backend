@@ -1,5 +1,4 @@
 const connection = require('../db');
-const format = require('../utils/format');
 const ServerError = require('../ServerError');
 
 module.exports = {
@@ -21,7 +20,7 @@ module.exports = {
     });
   },
   addSongsToUserLibrary: (spotifyID, spotifyLib) => {
-    //takes songs from Spotify response format
+    // takes songs from Spotify response format
     const insertArray = spotifyLib.map(song => [spotifyID, song.track.id, song.added_at]);
     connection.query(
       'INSERT IGNORE INTO UserLibrary (user_id, song_id, date_added) VALUES ?',
@@ -30,5 +29,5 @@ module.exports = {
         if (err) throw new ServerError('UserLibrary - addSongsToUserLibrary failed');
       }
     );
-  }
+  },
 };

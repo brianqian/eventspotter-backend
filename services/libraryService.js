@@ -2,21 +2,36 @@ const { setLibraryBasic } = require('../controllers/libraryController');
 const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
 const { spotifyFetch, getSongs } = require('../services/spotifyService');
 const authController = require('../controllers/authController');
+const cache = require('../cache');
+const format = require('../utils/format');
 
-const addSongsToUserAndLibrary = (spotifyID, songArray) => {
-  setLibraryBasic(songArray);
-  addSongsToUserLibrary(spotifyID, songArray);
+const updateDbAndCache = (spotifyID, songs, total) => {
+  setLibraryBasic(songs);
+  addSongsToUserLibrary(spotifyID, songs);
+  authController.editUserSongTotal(spotifyID, total);
+  cache.setLibrary(spotifyID, format.spotifyLibraryToCache(songs));
 };
 
-const updateLibraries = async (spotifyID, cachedUser) => {
+const fullUpdate = async (spotifyID, accessToken) => {
+  const { library, total } = await getSongs(accessToken, 2);
+  updateDbAndCache(spotifyID, library, total);
+};
+
+/** ********************
+ * UPDATE USER LIBRARY
+ * TODO: If the very first song is deleted, the entire library is rebuilt.
+ * Make a workaround that checks for differences.
+ ********************* */
+
+const attemptPartialUpdate = async spotifyID => {
   console.log('CHECKING FOR PARTIAL UPDATE');
-  const { accessToken, library } = cachedUser;
+  const cachedUser = cache.get(spotifyID);
+  const { accessToken, library: cacheLibrary } = cachedUser;
   const spotifyLibrary = await spotifyFetch(
     'https://api.spotify.com/v1/me/tracks?limit=50',
     accessToken
   );
-  authController.editUserSongTotal(spotifyID, spotifyLibrary.total);
-  const lastCachedSong = library[0];
+  const lastCachedSong = cacheLibrary[0];
   const lastCachedSongIndex = spotifyLibrary.items.findIndex(
     item => item.track.id === lastCachedSong.id && item.added_at === lastCachedSong.dateAdded
   );
@@ -27,18 +42,18 @@ const updateLibraries = async (spotifyID, cachedUser) => {
     // Append only the new songs instead of rebuilding the library.
     console.log('PARTIAL UPDATING USER LIBRARY');
     const newSongs = spotifyLibrary.slice(0, lastCachedSongIndex);
-    addSongsToUserAndLibrary(spotifyID, newSongs);
+    updateDbAndCache(spotifyID, newSongs, spotifyLibrary.total);
   } else if (libraryHasChanged) {
     // The last cached song is not found, rebuild full library;
     console.log('FULL UPDATING USER LIBRARY');
-    addSongsToUserAndLibrary(spotifyID, await getSongs(accessToken, 2));
+    fullUpdate(spotifyID, accessToken);
   } else {
     return console.log('NO NEW SONGS FOUND, INDEX: ', lastCachedSongIndex);
   }
-  console.log('END OF /ALL******************');
 };
 
 module.exports = {
-  addSongsToUserAndLibrary,
-  updateLibraries,
+  updateDbAndCache,
+  attemptPartialUpdate,
+  fullUpdate,
 };

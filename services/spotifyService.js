@@ -11,41 +11,35 @@ const spotifyFetch = async (endpoint, authToken) => {
       Authorization: `Bearer ${authToken}`,
     },
   });
-  if (resp.status !== 200)
-    throw new ServerError('spotify, spotifyFetch', resp.status, resp.statusText);
+  if (resp.status !== 200) throw new ServerError('spotifyFetch', resp.status, resp.statusText);
   resp = await resp.json();
   return resp;
 };
 
-const getSongs = (accessToken, pages, offset = 0) => {
-  return new Promise(async (resolve, reject) => {
-    const limit = 50;
-    const firstFetch = await spotifyFetch(
-      `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`,
-      accessToken
+const getSongs = async (accessToken, pages, offset = 0) => {
+  // return new Promise(async (resolve, reject) => {
+  const limit = 50;
+  const firstFetch = await spotifyFetch(
+    `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`,
+    accessToken
+  );
+  const promiseArr = [];
+  const numOfRequests = pages || firstFetch.total / limit;
+  for (let i = 1; i < numOfRequests; i += 1) {
+    const newOffset = 50 * i + offset;
+    promiseArr.push(
+      spotifyFetch(
+        `https://api.spotify.com/v1/me/tracks?offset=${newOffset}&limit=${limit}`,
+        accessToken
+      )
     );
-    const promiseArr = [];
-    const numOfRequests = pages || firstFetch.total / limit;
-    for (let i = 1; i < numOfRequests; i += 1) {
-      const newOffset = 50 * i + offset;
-      promiseArr.push(
-        spotifyFetch(
-          `https://api.spotify.com/v1/me/tracks?offset=${newOffset}&limit=${limit}`,
-          accessToken
-        )
-      );
-    }
-    const result = await Promise.all(promiseArr);
-    const userLibrary = result.reduce(
-      (acc, resp) => {
-        acc.push(...resp.items);
-        return acc;
-      },
-      [...firstFetch.items]
-    );
-    resolve(userLibrary);
-    reject(new ServerError('spotify, getSongs'));
-  });
+  }
+  const result = await Promise.all(promiseArr);
+  const library = result.reduce((acc, resp) => [...acc, ...resp.items], [...firstFetch.items]);
+  return { library, total: firstFetch.total };
+  // resolve(userLibrary);
+  // reject(new ServerError('spotify, getSongs'));
+  // });
 };
 
 const getTokens = async params => {
@@ -63,11 +57,13 @@ const getTokens = async params => {
     body: formattedParams,
   });
 
-  if (resp.status !== 200)
+  if (resp.status !== 200) {
     throw new ServerError('spotify, getTokens', resp.status, resp.statusText);
+  }
   resp = await resp.json();
-  if (resp.error)
+  if (resp.error) {
     throw new ServerError('spotify, SpotifySite', resp.error.status, resp.error.message);
+  }
   return resp;
 };
 

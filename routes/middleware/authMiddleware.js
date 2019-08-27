@@ -30,7 +30,7 @@ const requiresLogin = (req, res, next) => {
   console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
     console.log('🚫 🚫 🚫 ACCESS DENIED 🚫 🚫 🚫');
-    next(new ServerError(`requiresLogin -> ${req.path}`, 401, `Not Authorized`));
+    next(new ServerError(`requiresLogin -> ${req.path}`, 401, 'Not Authorized'));
   } else {
     next();
   }
@@ -52,7 +52,7 @@ const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
     const updatedUser = cache.set(spotifyID, {
       ...cachedUser,
       accessToken,
-      accessTokenExpiration
+      accessTokenExpiration,
     });
     res.locals.accessToken = accessToken;
     authController.editUserInfo(updatedUser);
@@ -67,5 +67,5 @@ const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
 module.exports = {
   validateToken,
   updateSpotifyToken,
-  requiresLogin
+  requiresLogin,
 };

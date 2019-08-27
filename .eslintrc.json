@@ -21,6 +21,7 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-console": [0],
-    "comma-dangle": [0]
+    "comma-dangle": [0],
+    "max-classes-per-file": [0]
   }
 }
