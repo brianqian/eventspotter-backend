@@ -8,8 +8,8 @@ const spotifyFetch = async (endpoint, authToken) => {
   let resp = await fetch(endpoint, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${authToken}`
-    }
+      Authorization: `Bearer ${authToken}`,
+    },
   });
   if (resp.status !== 200)
     throw new ServerError('spotify, spotifyFetch', resp.status, resp.statusText);
@@ -43,7 +43,6 @@ const getSongs = (accessToken, pages, offset = 0) => {
       },
       [...firstFetch.items]
     );
-    libraryController.setLibraryBasic(userLibrary);
     resolve(userLibrary);
     reject(new ServerError('spotify, getSongs'));
   });
@@ -59,9 +58,9 @@ const getTokens = async params => {
     method: 'POST',
     headers: {
       Authorization: `Basic ${encodedIDAndSecret}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: formattedParams
+    body: formattedParams,
   });
 
   if (resp.status !== 200)
@@ -75,12 +74,12 @@ const getTokens = async params => {
 const updateAccessToken = async refreshToken => {
   const params = {
     grant_type: 'refresh_token',
-    refresh_token: refreshToken
+    refresh_token: refreshToken,
   };
   const { access_token: accessToken } = await getTokens(params);
   return {
     accessToken,
-    accessTokenExpiration: Date.now() + 1000 * 60 * 55
+    accessTokenExpiration: Date.now() + 1000 * 60 * 55,
   };
 };
 
@@ -101,7 +100,7 @@ module.exports = {
   getTokens,
   updateAccessToken,
   spotifyFetch,
-  getTopArtists
+  getTopArtists,
 
   //   getAllSongFeatures: (songLibrary, accessToken) => {
   //     // Endpoint: https://api.spotify.com/v1/audio-features?ids={songID},{songId}
