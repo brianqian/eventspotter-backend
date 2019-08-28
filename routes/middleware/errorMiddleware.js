@@ -1,6 +1,6 @@
 const logAndHandleError = (err, req, res, next) => {
   console.log('LOGGING ERROR ⚠️');
-  console.error(`Server Error`);
+  console.error('Server Error');
   console.error('Code: ', err.code);
   console.error('Source: ', err.source);
   // console.error('Stack Trace: ', err.stack);
@@ -9,7 +9,7 @@ const logAndHandleError = (err, req, res, next) => {
   next(err);
 };
 
-const catchAsyncError = fn => {
+const catchAsyncError = (fn) => {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

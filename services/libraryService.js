@@ -1,4 +1,4 @@
-const { setLibraryBasic } = require('../controllers/libraryController');
+const { setLibrary } = require('../controllers/libraryController');
 const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
 const { spotifyFetch, getSongs, getAllSongFeatures } = require('../services/spotifyService');
 const authController = require('../controllers/authController');
@@ -6,7 +6,7 @@ const cache = require('../cache');
 const format = require('../utils/format');
 
 const updateDbAndCache = (spotifyID, songs, total, songFeatures) => {
-  setLibraryBasic(songs);
+  setLibrary(songs, songFeatures);
   addSongsToUserLibrary(spotifyID, songs);
   authController.editUserSongTotal(spotifyID, total);
   cache.setLibrary(spotifyID, format.spotifyLibraryToCache(songs));

@@ -11,19 +11,32 @@ module.exports = {
       });
     }),
 
-  setLibraryBasic: (library) => {
+  setLibrary: (library, features) => {
     /**
      * library is an array of 50 or less songs from Spotify.
      * library = spotifyResp.items
      */
 
-    const insertArray = library.map(({ track: { artists, name, id } }) => {
+    const insertArray = library.map(({ track: { artists, name, id } }, i) => {
       artists = artists.reduce((acc, artist) => [...acc, artist.name], []).join(', ');
-      return [id, name, artists];
+      return [
+        id,
+        name,
+        artists,
+        features[i].acousticness,
+        features[i].danceability,
+        features[i].energy,
+        features[i].instrumentalness,
+        features[i].loudness,
+        features[i].tempo,
+        features[i].valence,
+        features[i].speechiness,
+        features[i].liveness,
+      ];
     });
     console.log('IN SET LIBRARY CONTROLLER');
     connection.query(
-      'INSERT IGNORE INTO library (song_id, title, artist) VALUES ?',
+      'INSERT IGNORE INTO library (song_id, title, artist, acousticness, danceability, energy, instrumentalness, loudness, tempo, valence, speechiness, liveness) VALUES ?',
       [insertArray],
       (err, data) => {
         if (err) throw new ServerError('Library - getSong failed');

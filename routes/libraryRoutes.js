@@ -57,7 +57,7 @@ router.route('/all').get(
 //     await spotifyService.getSongs(accessToken, 4, offset) //! rewrite: see getSongs
 //   );
 //   addSongsToUserLibrary(spotifyID, nextSongs);
-//   setLibraryBasic(nextSongs);
+//   setLibrary(nextSongs);
 //   const userLibrary = cache.getKey(spotifyID, 'library');
 //   userLibrary.push(...nextSongs);
 //   cache.setLibrary(spotifyID, userLibrary);

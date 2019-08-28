@@ -26,6 +26,8 @@ CREATE TABLE user_settings(
   show_loudness BOOLEAN,
   show_tempo BOOLEAN,
   show_valence BOOLEAN,
+  show_speechiness BOOLEAN,
+  show_liveness BOOLEAN,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE CASCADE
 );
@@ -41,6 +43,8 @@ CREATE TABLE library(
   loudness FLOAT(7) DEFAULT NULL,
   tempo FLOAT(7) DEFAULT NULL,
   valence FLOAT(7) DEFAULT NULL,
+  speechiness FLOAT(7) DEFAULT NULL,
+  liveness FLOAT(7) DEFAULT NULL,
   PRIMARY KEY (song_id)
   
   );
