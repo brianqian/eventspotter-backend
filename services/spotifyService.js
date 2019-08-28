@@ -87,38 +87,56 @@ const getTopArtists = async (accessToken, range = 'long') => {
   return topArtists;
 };
 
+const getAllSongFeatures = async (accessToken, songLibrary) => {
+  // Endpoint: https://api.spotify.com/v1/audio-features?ids={songID},{songId}
+
+  const numOfRequests = Math.ceil(songLibrary.length / 100);
+  const promiseArray = [];
+
+  for (let i = 0; i < numOfRequests; i++) {
+    const endpoint = 'https://api.spotify.com/v1/audio-features?ids=';
+    const query = songLibrary
+      .slice(i * 100, (i + 1) * 100)
+      .map(({ track }) => track.id)
+      .join(',');
+    promiseArray.push(spotifyFetch(endpoint + query, accessToken));
+  }
+
+  const resp = await Promise.all(promiseArray);
+  return resp.reduce((acc, analysis) => {
+    acc.push(...analysis.audio_features);
+    return acc;
+  }, []);
+
+  // const dataShape = {
+  //   danceability: 0.808,
+  //   energy: 0.626,
+  //   key: 7,
+  //   loudness: -12.733,
+  //   mode: 1,
+  //   speechiness: 0.168,
+  //   acousticness: 0.00187,
+  //   instrumentalness: 0.159,
+  //   liveness: 0.376,
+  //   valence: 0.369,
+  //   tempo: 123.99,
+  //   type: 'audio_features',
+  //   id: '4JpKVNYnVcJ8tuMKjAj50A',
+  //   uri: 'spotify:track:4JpKVNYnVcJ8tuMKjAj50A',
+  //   track_href: 'https://api.spotify.com/v1/tracks/4JpKVNYnVcJ8tuMKjAj50A',
+  //   analysis_url:
+  //     'http://echonest-analysis.s3.amazonaws.com/TR/WhpYUARk1kNJ_qP0AdKGcDDFKOQTTgsOoINrqyPQjkUnbteuuBiyj_u94iFCSGzdxGiwqQ6d77f4QLL_8=/3/full.json?AWSAccessKeyId=AKIAJRDFEY23UEVW42BQ&Expires=1458063189&Signature=JRE8SDZStpNOdUsPN/PoS49FMtQ%3D',
+  //   duration_ms: 535223,
+  //   time_signature: 4,
+  // };
+  // check for existing song in songLibrary
+};
+
 module.exports = {
   getSongs,
   getTokens,
   updateAccessToken,
   spotifyFetch,
   getTopArtists,
-
-  //   getAllSongFeatures: (songLibrary, accessToken) => {
-  //     // Endpoint: https://api.spotify.com/v1/audio-features?ids={songID},{songId}
-  //     // Bearer + access token
-  //     // Response object: An array of objects containing
-  //     /** ******************
-  //      * { "danceability": 0.808,
-  //        "energy": 0.626,
-  //        "key": 7,
-  //        "loudness": -12.733,
-  //        "mode": 1,
-  //        "speechiness": 0.168,
-  //        "acousticness": 0.00187,
-  //        "instrumentalness": 0.159,
-  //        "liveness": 0.376,
-  //        "valence": 0.369,
-  //        "tempo": 123.99,
-  //        "type": "audio_features",
-  //        "id": "4JpKVNYnVcJ8tuMKjAj50A",
-  //        "uri": "spotify:track:4JpKVNYnVcJ8tuMKjAj50A",
-  //        "track_href": "https://api.spotify.com/v1/tracks/4JpKVNYnVcJ8tuMKjAj50A",
-  //        "analysis_url": "http://echonest-analysis.s3.amazonaws.com/TR/WhpYUARk1kNJ_qP0AdKGcDDFKOQTTgsOoINrqyPQjkUnbteuuBiyj_u94iFCSGzdxGiwqQ6d77f4QLL_8=/3/full.json?AWSAccessKeyId=AKIAJRDFEY23UEVW42BQ&Expires=1458063189&Signature=JRE8SDZStpNOdUsPN/PoS49FMtQ%3D",
-  //        "duration_ms": 535223,
-  //        "time_signature": 4
-  //      },
-  //      ************************ */
-  //     // check for existing song in songLibrary
-  //   }
+  getAllSongFeatures,
 };

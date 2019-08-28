@@ -34,7 +34,7 @@ router.route('/all').get(
     const cachedUser = cache.get(spotifyID);
     const cacheLibrary = cachedUser.library;
     // Return cached library if it exists
-    if (cacheLibrary) {
+    if (false) {
       res.json({ data: cacheLibrary });
     } else {
       // If it's a new user, retrieve library from Spotify
