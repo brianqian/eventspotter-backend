@@ -17,18 +17,18 @@ const spotifyFetch = async (endpoint, authToken) => {
 
 const getSongs = async (accessToken, pages, offset = 0) => {
   // return new Promise(async (resolve, reject) => {
-  const limit = 50;
+  const SONGS_PER_REQUEST = 50;
   const firstFetch = await spotifyFetch(
     `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`,
     accessToken
   );
   const promiseArr = [];
-  const numOfRequests = pages || firstFetch.total / limit;
+  const numOfRequests = pages || firstFetch.total / SONGS_PER_REQUEST;
   for (let i = 1; i < numOfRequests; i += 1) {
     const newOffset = 50 * i + offset;
     promiseArr.push(
       spotifyFetch(
-        `https://api.spotify.com/v1/me/tracks?offset=${newOffset}&limit=${limit}`,
+        `https://api.spotify.com/v1/me/tracks?offset=${newOffset}&limit=${SONGS_PER_REQUEST}`,
         accessToken
       )
     );

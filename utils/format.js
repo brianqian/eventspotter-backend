@@ -64,24 +64,6 @@ const verifyJWT = async (cookie) => {
 
   return result.userInfo;
 };
-
-const formatArtistsToArray = (data, filterBy) => {
-  if (!data.length) return [];
-  let formattedArtists;
-  if (filterBy === 'top_artists') {
-    formattedArtists = data.map(({ name }) => name);
-  } else {
-    formattedArtists = [];
-    data.forEach(({ track }) => {
-      track.artists.forEach((artist) => {
-        formattedArtists.push(artist.name);
-      });
-    });
-  }
-
-  return formattedArtists;
-};
-
 const parseSeatGeekEvents = (event) => {
   return {
     id: event.id,
@@ -112,7 +94,6 @@ const format = {
   dbLibraryToCache,
   verifyJWT,
   parseSeatGeekEvents,
-  formatArtistsToArray,
 };
 
 module.exports = format;

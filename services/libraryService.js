@@ -13,7 +13,7 @@ const updateDbAndCache = (spotifyID, songs, total, songFeatures) => {
 };
 
 const fullUpdate = async (spotifyID, accessToken) => {
-  const { library, total } = await getSongs(accessToken, 3);
+  const { library, total } = await getSongs(accessToken);
   const features = await getSongFeatures(accessToken, library);
   updateDbAndCache(spotifyID, library, total, features);
 };
@@ -42,8 +42,9 @@ const attemptPartialUpdate = async (spotifyID) => {
   if (lastCachedSongIndex > 0 && libraryHasChanged) {
     // Append only the new songs instead of rebuilding the library.
     console.log('PARTIAL UPDATING USER LIBRARY');
-    const newSongs = spotifyLibrary.slice(0, lastCachedSongIndex);
-    updateDbAndCache(spotifyID, newSongs, spotifyLibrary.total);
+    const newSongs = spotifyLibrary.items.slice(0, lastCachedSongIndex);
+    const songFeatures = await getSongFeatures(accessToken, newSongs);
+    updateDbAndCache(spotifyID, newSongs, spotifyLibrary.total, songFeatures);
   } else if (libraryHasChanged) {
     // The last cached song is not found, rebuild full library;
     console.log('FULL UPDATING USER LIBRARY');

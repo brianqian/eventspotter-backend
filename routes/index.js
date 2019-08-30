@@ -5,7 +5,7 @@ const calendarRoutes = require('./calendarRoutes');
 const { requiresLogin } = require('./middleware/authMiddleware');
 
 router.use('/auth', authRoutes);
-router.use('/library', requiresLogin, apiRoutes);
+router.use('/library', apiRoutes);
 router.use('/calendar', requiresLogin, calendarRoutes);
 
 module.exports = router;

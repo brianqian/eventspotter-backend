@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const sizeof = require('object-sizeof');
 const cache = require('../cache');
 const spotifyService = require('../services/spotifyService');
+
 // const format = require('../utils/format');
 // const { setLibraryBasic } = require('../controllers/libraryController');
 // const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
@@ -36,7 +38,7 @@ router.route('/all').get(
     const cachedUser = cache.get(spotifyID);
     const cacheLibrary = cachedUser.library;
     // Return cached library if it exists
-    if (false) {
+    if (cacheLibrary) {
       res.json({ data: cacheLibrary });
     } else {
       // If it's a new user, retrieve library from Spotify
@@ -67,7 +69,7 @@ router.route('/all').get(
 //   res.json({ updatedLibrary: userLibrary });
 // });
 
-router.get('/top_artists', async (req, res) => {
+router.get('/artists', async (req, res) => {
   const { accessToken } = res.locals;
   const topArtists = await spotifyService.getTopArtists(accessToken);
   console.log('IN BACKEND TOP ARTIST', topArtists.items[0], topArtists.items.length);
@@ -77,12 +79,8 @@ router.get('/top_artists', async (req, res) => {
 router.get(
   '/test',
   catchAsyncError(async (req, res) => {
-    const result = await libraryController.getSong([
-      '03guGOyLWtcdLupZ2TD1yi',
-      '03IxJiB8ZOH9hEQZF5mCNY',
-      'test',
-    ]);
-    console.log('IN TEST 🐷', result);
+    const user = cache.get('122716131');
+    console.log(sizeof(user.library));
   })
 );
 
