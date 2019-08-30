@@ -1,6 +1,6 @@
 const { setLibrary } = require('../controllers/libraryController');
 const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
-const { spotifyFetch, getSongs, getAllSongFeatures } = require('../services/spotifyService');
+const { spotifyFetch, getSongs, getSongFeatures } = require('../services/spotifyService');
 const authController = require('../controllers/authController');
 const cache = require('../cache');
 const format = require('../utils/format');
@@ -9,13 +9,12 @@ const updateDbAndCache = (spotifyID, songs, total, songFeatures) => {
   setLibrary(songs, songFeatures);
   addSongsToUserLibrary(spotifyID, songs);
   authController.editUserSongTotal(spotifyID, total);
-  cache.setLibrary(spotifyID, format.spotifyLibraryToCache(songs));
+  cache.setLibrary(spotifyID, format.spotifyLibraryToCache(songs, songFeatures));
 };
 
 const fullUpdate = async (spotifyID, accessToken) => {
   const { library, total } = await getSongs(accessToken, 3);
-  const features = await getAllSongFeatures(accessToken, library);
-
+  const features = await getSongFeatures(accessToken, library);
   updateDbAndCache(spotifyID, library, total, features);
 };
 

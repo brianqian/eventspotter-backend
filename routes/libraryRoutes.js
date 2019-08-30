@@ -5,6 +5,8 @@ const spotifyService = require('../services/spotifyService');
 // const { setLibraryBasic } = require('../controllers/libraryController');
 // const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
 // const authController = require('../controllers/authController');
+const libraryController = require('../controllers/libraryController');
+
 const { requiresLogin } = require('./middleware/authMiddleware');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
 const libraryService = require('../services/libraryService');
@@ -71,5 +73,17 @@ router.get('/top_artists', async (req, res) => {
   console.log('IN BACKEND TOP ARTIST', topArtists.items[0], topArtists.items.length);
   res.json({ data: topArtists.items });
 });
+
+router.get(
+  '/test',
+  catchAsyncError(async (req, res) => {
+    const result = await libraryController.getSong([
+      '03guGOyLWtcdLupZ2TD1yi',
+      '03IxJiB8ZOH9hEQZF5mCNY',
+      'test',
+    ]);
+    console.log('IN TEST 🐷', result);
+  })
+);
 
 module.exports = router;

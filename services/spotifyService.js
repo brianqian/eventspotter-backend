@@ -87,9 +87,9 @@ const getTopArtists = async (accessToken, range = 'long') => {
   return topArtists;
 };
 
-const getAllSongFeatures = async (accessToken, songLibrary) => {
+const getSongFeatures = async (accessToken, songLibrary) => {
   // Endpoint: https://api.spotify.com/v1/audio-features?ids={songID},{songId}
-
+  if (!songLibrary.length) return [];
   const numOfRequests = Math.ceil(songLibrary.length / 100);
   const promiseArray = [];
 
@@ -138,5 +138,5 @@ module.exports = {
   updateAccessToken,
   spotifyFetch,
   getTopArtists,
-  getAllSongFeatures,
+  getSongFeatures,
 };

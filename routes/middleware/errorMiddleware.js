@@ -9,9 +9,8 @@ const logAndHandleError = (err, req, res, next) => {
   next(err);
 };
 
-const catchAsyncError = (fn) => {
-  return (req, res, next) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
-  };
+const catchAsyncError = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
 };
+
 module.exports = { logAndHandleError, catchAsyncError };

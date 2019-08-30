@@ -63,6 +63,8 @@ class LRUCache {
         loudness: song.loudness,
         tempo: song.tempo,
         valence: song.valence,
+        speechiness: song.speechiness,
+        liveness: song.liveness,
       };
       songObject = updatedObject;
     });

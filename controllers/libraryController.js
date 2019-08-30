@@ -4,9 +4,13 @@ const ServerError = require('../ServerError');
 module.exports = {
   getSong: (songID) =>
     new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM library WHERE songID = ?', [songID], (err, data) => {
-        if (err) reject(new ServerError('Library - getSong failed'));
-        console.log(data);
+      console.log(songID);
+      connection.query('SELECT * FROM library WHERE song_id IN (?)', [songID], (err, data) => {
+        if (err) {
+          console.error('err', err);
+          reject(new ServerError('Library - getSong failed'));
+        }
+        console.log(data[0], data.length);
         resolve(data);
       });
     }),

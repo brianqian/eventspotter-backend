@@ -37,7 +37,7 @@ CREATE TABLE library(
   title VARCHAR(100),
   artist VARCHAR(200),
   acousticness FLOAT(7) DEFAULT NULL,
-  danceability FLOAT(7) DEFAULT NULL,
+  danceability FLOAT(7) DEFAULT NULL, 
   energy FLOAT(7) DEFAULT NULL,
   instrumentalness FLOAT(7) DEFAULT NULL,
   loudness FLOAT(7) DEFAULT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE library(
   CREATE TABLE UserLibrary(
   user_id VARCHAR(100),
   song_id VARCHAR(100),
-  date_added VARCHAR(100),
+  added_at VARCHAR(100),
   PRIMARY KEY (user_id, song_id),
 	FOREIGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE CASCADE
   )

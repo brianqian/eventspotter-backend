@@ -19,20 +19,29 @@ const dbProfileToCache = (dbObject) => {
   return result;
 };
 
-const spotifyLibraryToCache = (spotifyResp) => {
+const spotifyLibraryToCache = (spotifyResp, audioFeatures) => {
   console.log('FORMATTING LIB FOR CACHE', spotifyResp[0].track.name, spotifyResp.length);
-  return spotifyResp.map((song) => ({
+  return spotifyResp.map((song, i) => ({
     id: song.track.id,
     dateAdded: song.added_at,
     title: song.track.name,
     artist: song.track.artists.reduce((acc, artist) => [...acc, artist.name], []).join(', '),
+    acousticness: audioFeatures[i].acousticness,
+    danceability: audioFeatures[i].danceability,
+    energy: audioFeatures[i].energy,
+    instrumentalness: audioFeatures[i].instrumentalness,
+    loudness: audioFeatures[i].loudness,
+    tempo: audioFeatures[i].tempo,
+    valence: audioFeatures[i].valence,
+    speechiness: audioFeatures[i].speechiness,
+    liveness: audioFeatures[i].liveness,
   }));
 };
 
 const dbLibraryToCache = (library) =>
   library.map((song) => ({
     id: song.song_id,
-    dateAdded: song.date_added,
+    dateAdded: song.added_at,
     title: song.title,
     artist: song.artist,
     acousticness: song.acousticness,
@@ -42,6 +51,8 @@ const dbLibraryToCache = (library) =>
     loudness: song.loudness,
     tempo: song.tempo,
     valence: song.valence,
+    speechiness: song.speechiness,
+    liveness: song.liveness,
   }));
 
 const verifyJWT = async (cookie) => {
