@@ -8,6 +8,7 @@ const spotifyService = require('../services/spotifyService');
 // const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
 // const authController = require('../controllers/authController');
 const libraryController = require('../controllers/libraryController');
+const userLibraryController = require('../controllers/userLibraryController');
 
 const { requiresLogin } = require('./middleware/authMiddleware');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
@@ -74,6 +75,34 @@ router.get('/artists', async (req, res) => {
   const topArtists = await spotifyService.getTopArtists(accessToken);
   console.log('IN BACKEND TOP ARTIST', topArtists.items[0], topArtists.items.length);
   res.json({ data: topArtists.items });
+});
+
+router.get('/top/:filterBy', async (req, res) => {
+  const { accessToken, spotifyID } = res.locals;
+  const { filterBy } = req.params;
+  let data;
+  const whitelist = [
+    'acousticness',
+    'danceability',
+    'energy',
+    'instrumentalness',
+    'loudness',
+    'tempo',
+    'valence',
+    'speechiness',
+    'liveness',
+  ];
+  if (filterBy === 'artists') {
+    const topArtists = await spotifyService.getTopArtists(accessToken);
+    data = topArtists.items;
+  } else if (whitelist.includes(filterBy)) {
+    data = await userLibraryController.getUserLibraryByAnalytic(spotifyID, filterBy);
+    console.log(data.length, data[0]);
+  } else {
+    return res.json({ data: [] });
+  }
+  console.log('IN BACKEND TOP ARTIST', data[0], data.length);
+  res.json({ data });
 });
 
 router.get(

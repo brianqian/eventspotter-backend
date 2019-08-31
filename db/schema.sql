@@ -36,6 +36,7 @@ CREATE TABLE library(
   song_id VARCHAR(100),
   title VARCHAR(100),
   artist VARCHAR(200),
+  album_img VARCHAR(255),
   acousticness FLOAT(7) DEFAULT NULL,
   danceability FLOAT(7) DEFAULT NULL, 
   energy FLOAT(7) DEFAULT NULL,
