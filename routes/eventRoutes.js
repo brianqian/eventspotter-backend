@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { getEventsByArtists } = require('../services/seatgeekService');
-const { catchAsyncError } = require('../routes/middleware/errorMiddleware');
+const { getEventsByArtists, getEventsByOneArtist } = require('../services/seatgeekService');
+const { catchAsyncError } = require('./middleware/errorMiddleware');
 
 router.get(
-  '/generate_calendar',
+  '/generate_events',
   catchAsyncError(async (req, res) => {
     const artists = req.query || null;
     if (!artists) return res.json({ data: [] });
@@ -13,7 +13,17 @@ router.get(
       return acc;
     }, []);
     data = data.sort((a, b) => (a.events.length > b.events.length ? -1 : 1));
-    console.log('GENERATE CALENDAR', data);
+    console.log('GENERATE events', data);
+    res.json({ data });
+  })
+);
+
+router.get(
+  '/artist/:artist',
+  catchAsyncError(async (req, res) => {
+    const { artist } = req.params || null;
+    if (!artist) return res.json({ data: [] });
+    const data = await getEventsByOneArtist(artist);
     res.json({ data });
   })
 );

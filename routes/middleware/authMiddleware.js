@@ -9,11 +9,11 @@ const validateToken = catchAsyncError(async (req, res, next) => {
   console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
   try {
     const encodedToken = req.headers && req.headers['x-token'];
-    console.log('ENCODED TOKEN: ', encodedToken);
+    // console.log('ENCODED TOKEN: ', encodedToken);
     if (!encodedToken) throw new Error(`No token received in headers: ${encodedToken}`);
     const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
     if (!userInfo) throw new Error(`JWT Verify failed. userInfo: ${userInfo}`);
-    console.log('Cookie Validated:', userInfo);
+    console.log('Cookie Validated:', userInfo.spotifyID);
     res.locals.spotifyID = userInfo.spotifyID;
     next();
   } catch (err) {
@@ -27,7 +27,7 @@ const requiresLogin = (req, res, next) => {
   console.log('requiresLogin MIDDLEWARE HIT ');
   console.log('✋*************************✋');
   const { spotifyID = null, accessToken = null } = res.locals;
-  console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
+  // console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
     console.log('🚫 🚫 🚫 ACCESS DENIED 🚫 🚫 🚫');
     next(new ServerError(`requiresLogin -> ${req.path}`, 401, 'Not Authorized'));
