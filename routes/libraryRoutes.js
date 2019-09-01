@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const sizeof = require('object-sizeof');
+// const sizeof = require('object-sizeof');
 const cache = require('../cache');
 const spotifyService = require('../services/spotifyService');
 
@@ -105,12 +105,12 @@ router.get('/top/:filterBy', async (req, res) => {
   res.json({ data });
 });
 
-router.get(
-  '/test',
-  catchAsyncError(async (req, res) => {
-    const user = cache.get('122716131');
-    console.log(sizeof(user.library));
-  })
-);
+// router.get(
+//   '/test',
+//   catchAsyncError(async (req, res) => {
+//     const user = cache.get('122716131');
+//     console.log(sizeof(user.library));
+//   })
+// );
 
 module.exports = router;
