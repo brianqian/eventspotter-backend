@@ -13,7 +13,7 @@ module.exports = {
             delete item.user_id;
           });
 
-          console.log('in lib controller, getuserlib', data[0], data.length);
+          // console.log('in lib controller, getuserlib', data[0], data.length);
           resolve(data);
         }
       );
@@ -32,7 +32,7 @@ module.exports = {
           //   delete item.user_id;
           // });
 
-          console.log('in lib controller, getuserlib', data[0], data.length);
+          // console.log('in lib controller, getuserlib', data[0], data.length);
           resolve(data);
         }
       );

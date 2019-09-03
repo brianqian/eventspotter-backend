@@ -71,12 +71,6 @@ class LRUCache {
     this.set(spotifyID, cachedUser);
   }
 
-  setKey(spotifyID, key, value) {
-    const cachedUser = this.get(spotifyID);
-    const updatedUser = { ...cachedUser, [key]: value };
-    this.set(spotifyID, updatedUser);
-  }
-
   get(key) {
     if (!this.cache[key]) return null;
     const { value } = this.cache[key];
@@ -123,7 +117,7 @@ class LRUCache {
 }
 
 const cache = new LRUCache();
-
+const eventCache = new LRUCache();
 //  cacheExample = {
 
 //   spotifyUserID: {
@@ -152,4 +146,4 @@ const cache = new LRUCache();
 //   }
 // }
 
-module.exports = cache;
+module.exports = { cache, eventCache };

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 // const sizeof = require('object-sizeof');
-const cache = require('../cache');
+const { cache } = require('../cache');
 const spotifyService = require('../services/spotifyService');
 
 // const format = require('../utils/format');
@@ -77,7 +77,27 @@ router.get('/artists', async (req, res) => {
   res.json({ data: topArtists.items });
 });
 
+router.get(
+  '/top_tracks/:artistID',
+  catchAsyncError(async (req, res) => {
+    const { accessToken } = res.locals;
+    const { artistID } = req.params;
+    console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
+    const { tracks = [] } = await spotifyService.getTopTracks(accessToken, artistID);
+    res.json({ data: tracks });
+  })
+);
+
+router.get('/top/artists/:term', async (req, res) => {
+  console.log('🐸', 'IN NEW ARTISTS');
+  const { accessToken } = res.locals;
+  const { term = 'long' } = req.params;
+  const topArtists = await spotifyService.getTopArtists(accessToken, term);
+  res.json({ data: topArtists.items });
+});
+
 router.get('/top/:filterBy', async (req, res) => {
+  console.log('🐸', 'IN FILTER BY ');
   const { accessToken, spotifyID } = res.locals;
   const { filterBy } = req.params;
   let data;

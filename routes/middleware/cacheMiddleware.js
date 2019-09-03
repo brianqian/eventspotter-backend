@@ -1,5 +1,5 @@
 const authController = require('../../controllers/authController');
-const cache = require('../../cache');
+const { cache } = require('../../cache');
 const format = require('../../utils/format');
 const { catchAsyncError } = require('./errorMiddleware');
 const { getUserLibrary } = require('../../controllers/userLibraryController');

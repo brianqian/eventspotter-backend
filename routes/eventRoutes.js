@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { getEventsByArtists, getEventsByOneArtist } = require('../services/seatgeekService');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
+const { eventCache } = require('../cache');
 
 router.get(
   '/generate_events',
@@ -23,7 +24,10 @@ router.get(
   catchAsyncError(async (req, res) => {
     const { artist } = req.params || null;
     if (!artist) return res.json({ data: [] });
+    const cachedArtistEvents = eventCache.get(artist);
+    if (cachedArtistEvents) return res.json({ data: cachedArtistEvents });
     const data = await getEventsByOneArtist(artist);
+    eventCache.set(artist, data);
     res.json({ data });
   })
 );

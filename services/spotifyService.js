@@ -86,7 +86,14 @@ const getTopArtists = async (accessToken, range = 'long') => {
   );
   return topArtists;
 };
-
+const getTopTracks = async (accessToken, artistID) => {
+  console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
+  const topTracks = await spotifyFetch(
+    `https://api.spotify.com/v1/artists/${artistID}/top-tracks?country=from_token`,
+    accessToken
+  );
+  return topTracks;
+};
 const getSongFeatures = async (accessToken, songLibrary) => {
   // Endpoint: https://api.spotify.com/v1/audio-features?ids={songID},{songId}
   if (!songLibrary.length) return [];
@@ -103,10 +110,7 @@ const getSongFeatures = async (accessToken, songLibrary) => {
   }
 
   const resp = await Promise.all(promiseArray);
-  return resp.reduce((acc, analysis) => {
-    acc.push(...analysis.audio_features);
-    return acc;
-  }, []);
+  return resp.reduce((acc, analysis) => [...acc, ...analysis.audio_features], []);
 
   // const dataShape = {
   //   danceability: 0.808,
@@ -139,4 +143,5 @@ module.exports = {
   spotifyFetch,
   getTopArtists,
   getSongFeatures,
+  getTopTracks,
 };

@@ -2,7 +2,7 @@ const { setLibrary } = require('../controllers/libraryController');
 const { addSongsToUserLibrary } = require('../controllers/userLibraryController');
 const { spotifyFetch, getSongs, getSongFeatures } = require('../services/spotifyService');
 const authController = require('../controllers/authController');
-const cache = require('../cache');
+const { cache } = require('../cache');
 const format = require('../utils/format');
 
 const updateDbAndCache = (spotifyID, songs, total, songFeatures) => {

@@ -1,31 +1,31 @@
 const jwt = require('jsonwebtoken');
-const cache = require('../../cache');
+const { cache } = require('../../cache');
 const { updateAccessToken } = require('../../services/spotifyService');
 const authController = require('../../controllers/authController');
 const ServerError = require('../../ServerError');
 const { catchAsyncError } = require('../middleware/errorMiddleware');
 
 const validateToken = catchAsyncError(async (req, res, next) => {
-  console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
+  // console.log('🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 ');
+  const encodedToken = req.headers && req.headers['x-token'];
+  // console.log('ENCODED TOKEN: ', encodedToken);
+  if (!encodedToken) return next();
   try {
-    const encodedToken = req.headers && req.headers['x-token'];
-    // console.log('ENCODED TOKEN: ', encodedToken);
-    if (!encodedToken) throw new Error(`No token received in headers: ${encodedToken}`);
     const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
-    if (!userInfo) throw new Error(`JWT Verify failed. userInfo: ${userInfo}`);
+    if (!userInfo) throw new ServerError('validateToken', 401, `JWT Verify failed.`);
     console.log('Cookie Validated:', userInfo.spotifyID);
     res.locals.spotifyID = userInfo.spotifyID;
     next();
   } catch (err) {
     console.error('validateToken error-- ', err.message);
-    return next();
+    throw err;
   }
 });
 
 const requiresLogin = (req, res, next) => {
-  console.log('✋************************✋');
-  console.log('requiresLogin MIDDLEWARE HIT ');
-  console.log('✋*************************✋');
+  // console.log('✋************************✋');
+  // console.log('requiresLogin MIDDLEWARE HIT ');
+  // console.log('✋*************************✋');
   const { spotifyID = null, accessToken = null } = res.locals;
   // console.log('MIDDLEWARE - RES.LOCALS:', res.locals);
   if (!spotifyID || !accessToken) {
@@ -38,8 +38,8 @@ const requiresLogin = (req, res, next) => {
 
 const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
   console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~~~♻');
-  console.log('PATH:', req.path);
-  console.log('UPDATING SPOTIFY TOKEN START');
+  // console.log('PATH:', req.path);
+  // console.log('UPDATING SPOTIFY TOKEN START');
   const { spotifyID = null } = res.locals;
   if (!spotifyID) return next();
   const cachedUser = cache.get(spotifyID);
@@ -59,7 +59,7 @@ const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
   } else {
     res.locals.accessToken = cachedUser.accessToken;
   }
-  console.log('UPDATING SPOTIFY TOKEN END');
+  // console.log('UPDATING SPOTIFY TOKEN END');
   console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~♻`');
   return next();
 });
