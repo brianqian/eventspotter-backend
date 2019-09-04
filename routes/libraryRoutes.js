@@ -82,14 +82,14 @@ router.get(
   catchAsyncError(async (req, res) => {
     const { accessToken } = res.locals;
     const { artistID } = req.params;
-    console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
+    // console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
     const { tracks = [] } = await spotifyService.getTopTracks(accessToken, artistID);
     res.json({ data: tracks });
   })
 );
 
 router.get('/top/artists/:term', async (req, res) => {
-  console.log('🐸', 'IN NEW ARTISTS');
+  // console.log('🐸', 'IN NEW ARTISTS');
   const { accessToken } = res.locals;
   const { term = 'long' } = req.params;
   const topArtists = await spotifyService.getTopArtists(accessToken, term);
@@ -97,7 +97,7 @@ router.get('/top/artists/:term', async (req, res) => {
 });
 
 router.get('/top/:filterBy', async (req, res) => {
-  console.log('🐸', 'IN FILTER BY ');
+  // console.log('🐸', 'IN FILTER BY ');
   const { accessToken, spotifyID } = res.locals;
   const { filterBy } = req.params;
   let data;

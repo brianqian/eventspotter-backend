@@ -87,7 +87,7 @@ const getTopArtists = async (accessToken, range = 'long') => {
   return topArtists;
 };
 const getTopTracks = async (accessToken, artistID) => {
-  console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
+  // console.log('🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸', artistID, accessToken);
   const topTracks = await spotifyFetch(
     `https://api.spotify.com/v1/artists/${artistID}/top-tracks?country=from_token`,
     accessToken

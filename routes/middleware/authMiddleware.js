@@ -12,7 +12,7 @@ const validateToken = catchAsyncError(async (req, res, next) => {
   if (!encodedToken) return next();
   try {
     const { userInfo = null } = await jwt.verify(encodedToken, process.env.JWT_SECRET_KEY);
-    if (!userInfo) throw new ServerError('validateToken', 401, `JWT Verify failed.`);
+    if (!userInfo) throw new ServerError('validateToken', 401, 'JWT Verify failed.');
     console.log('Cookie Validated:', userInfo.spotifyID);
     res.locals.spotifyID = userInfo.spotifyID;
     next();
@@ -37,14 +37,14 @@ const requiresLogin = (req, res, next) => {
 };
 
 const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
-  console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~~~♻');
+  // console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~~~♻');
   // console.log('PATH:', req.path);
   // console.log('UPDATING SPOTIFY TOKEN START');
   const { spotifyID = null } = res.locals;
   if (!spotifyID) return next();
   const cachedUser = cache.get(spotifyID);
   const tokenExpired = Date.now() > cachedUser.accessTokenExpiration;
-  console.log(`TOKEN EXPIRED: ${tokenExpired}, ${Date.now()}`, cachedUser.accessTokenExpiration);
+  // console.log(`TOKEN EXPIRED: ${tokenExpired}, ${Date.now()}`, cachedUser.accessTokenExpiration);
 
   if (tokenExpired) {
     const newTokens = await updateAccessToken(cachedUser.refreshToken);
@@ -60,7 +60,7 @@ const updateSpotifyToken = catchAsyncError(async (req, res, next) => {
     res.locals.accessToken = cachedUser.accessToken;
   }
   // console.log('UPDATING SPOTIFY TOKEN END');
-  console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~♻`');
+  // console.log('♻~~~~~~~~~~~~~~~~~~~~~~~~♻`');
   return next();
 });
 
