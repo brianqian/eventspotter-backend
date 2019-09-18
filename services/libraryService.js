@@ -13,7 +13,7 @@ const updateDbAndCache = (spotifyID, songs, total, songFeatures) => {
 };
 
 const fullUpdate = async (spotifyID, accessToken) => {
-  const { library, total } = await getSongs(accessToken, 3);
+  const { library, total } = await getSongs(accessToken);
   const features = await getSongFeatures(accessToken, library);
   updateDbAndCache(spotifyID, library, total, features);
 };
