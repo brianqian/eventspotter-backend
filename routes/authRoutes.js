@@ -36,11 +36,7 @@ router.get(
     const userInfo = {
       spotifyID: profile.id,
       displayName: profile.display_name,
-<<<<<<< HEAD
       imgURL: (profile.images[0] && profile.images[0].url) || '',
-=======
-      imgURL: profile.images[0].url,
->>>>>>> parent of 31aed0c... created default value for userimg
     };
 
     // SAVE ENCODED TOKEN TO COOKIE ***********

@@ -37,11 +37,7 @@ CREATE TABLE library(
   CREATE TABLE UserLibrary(
   user_id VARCHAR(100),
   song_id VARCHAR(100),
-<<<<<<< HEAD
   date_added VARCHAR(100),
-=======
-  added_at VARCHAR(100),
->>>>>>> master
   PRIMARY KEY (user_id, song_id),
   FOREIGN KEY (user_id) REFERENCES user_info(user_id)
   ON DELETE CASCADE
