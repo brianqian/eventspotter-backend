@@ -10,8 +10,9 @@ const spotifyFetch = async (endpoint, authToken) => {
       Authorization: `Bearer ${authToken}`,
     },
   });
-  if (resp.status !== 200) throw new ServerError('spotifyFetch', resp.status, resp.statusText);
+  // if (resp.status !== 200) throw new ServerError('spotifyFetch', resp.status, resp.statusText);
   resp = await resp.json();
+  console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀', resp);
   return resp;
 };
 
