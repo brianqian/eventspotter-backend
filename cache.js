@@ -52,7 +52,7 @@ class LRUCache {
 
   setLibraryFeatures(spotifyID, library) {
     const cachedUser = this.get(spotifyID);
-    library.forEach(song => {
+    library.forEach((song) => {
       let songObject = cachedUser.library[song.id];
       const updatedObject = {
         ...songObject,
@@ -62,31 +62,21 @@ class LRUCache {
         instrumentalness: song.instrumentalness,
         loudness: song.loudness,
         tempo: song.tempo,
-        valence: song.valence
+        valence: song.valence,
+        speechiness: song.speechiness,
+        liveness: song.liveness,
       };
       songObject = updatedObject;
     });
     this.set(spotifyID, cachedUser);
   }
 
-  setKey(spotifyID, key, value) {
-    const cachedUser = this.get(spotifyID);
-    const updatedUser = { ...cachedUser, [key]: value };
-    this.set(spotifyID, updatedUser);
-  }
-
   get(key) {
     if (!this.cache[key]) return null;
-
     const { value } = this.cache[key];
     this.delete(key);
     this.set(key, value);
     return value;
-  }
-
-  getKey(spotifyID, key) {
-    const cachedUser = this.get(spotifyID);
-    return cachedUser[key];
   }
 
   delete(key) {
@@ -127,13 +117,33 @@ class LRUCache {
 }
 
 const cache = new LRUCache();
-// cache.set('a', 'a');
-// cache.set('c', 'c');
-// cache.set('d', 'd');
-// cache.getHead();
-// console.log(cache.get('a'));
-// cache.getHead();
-// cache.delete('c');
-// cache.getSize();
+const eventCache = new LRUCache();
+//  cacheExample = {
 
-module.exports = cache;
+//   spotifyUserID: {
+//     spotifyID: string,
+//     displayName: string,
+//     imgURL: string,
+//     refreshToken: string,
+//     accessToken: string,
+//     accessTokenExpiration: string,
+//     totalSongs: string,
+//     library: [
+//       {
+//        id: string,
+//        dateAdded: string,
+//        title: string,
+//        artists: string,
+//        acousticness: number,
+//        danceability: number,
+//        energy: number,
+//        instrumentalness: number,
+//        loudness: number,
+//        tempo: number,
+//        valence: number
+//        },
+//     ],
+//   }
+// }
+
+module.exports = { cache, eventCache };

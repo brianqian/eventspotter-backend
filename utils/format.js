@@ -1,14 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const JSONToURL = object => {
-  return Object.keys(object)
-    .map(key => {
-      return `${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`;
-    })
+const JSONToURL = (object) =>
+  Object.keys(object)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`)
     .join('&');
-};
 
-const dbProfileToCache = dbObject => {
+const dbProfileToCache = (dbObject) => {
   if (!dbObject) return false;
   const result = {
     spotifyID: dbObject.user_id,
@@ -17,38 +14,50 @@ const dbProfileToCache = dbObject => {
     refreshToken: dbObject.refresh_token,
     accessToken: dbObject.access_token,
     accessTokenExpiration: dbObject.access_token_expiration,
-    totalSongs: dbObject.total_songs
+    totalSongs: dbObject.total_songs,
   };
   return result;
 };
 
-const spotifyLibraryToCache = spotifyResp => {
+const spotifyLibraryToCache = (spotifyResp, audioFeatures) => {
   console.log('FORMATTING LIB FOR CACHE', spotifyResp[0].track.name, spotifyResp.length);
-  return spotifyResp.map(song => ({
+  return spotifyResp.map((song, i) => ({
     id: song.track.id,
     dateAdded: song.added_at,
     title: song.track.name,
-    artist: song.track.artists.reduce((acc, artist) => [...acc, artist.name], []).join(', ')
+    artist: song.track.artists.reduce((acc, artist) => [...acc, artist.name], []).join(', '),
+    album_img: song.track.album.images[1].url,
+    acousticness: audioFeatures[i].acousticness,
+    danceability: audioFeatures[i].danceability,
+    energy: audioFeatures[i].energy,
+    instrumentalness: audioFeatures[i].instrumentalness,
+    loudness: audioFeatures[i].loudness,
+    tempo: audioFeatures[i].tempo,
+    valence: audioFeatures[i].valence,
+    speechiness: audioFeatures[i].speechiness,
+    liveness: audioFeatures[i].liveness,
   }));
 };
 
-const dbLibraryToCache = library => {
-  return library.map(song => ({
+const dbLibraryToCache = (library) =>
+  library.map((song) => ({
     id: song.song_id,
-    dateAdded: song.date_added,
+    dateAdded: song.added_at,
     title: song.title,
     artist: song.artist,
+    albumImg: song.album_img,
     acousticness: song.acousticness,
     danceability: song.danceability,
     energy: song.energy,
     instrumentalness: song.instrumentalness,
     loudness: song.loudness,
     tempo: song.tempo,
-    valence: song.valence
+    valence: song.valence,
+    speechiness: song.speechiness,
+    liveness: song.liveness,
   }));
-};
 
-const verifyJWT = async cookie => {
+const verifyJWT = async (cookie) => {
   if (!cookie) return null;
   console.log('IN VERIFY JWT', cookie);
   // console.log('IN DECODE COOKIE************. DECODING', cookie);
@@ -57,25 +66,7 @@ const verifyJWT = async cookie => {
 
   return result.userInfo;
 };
-
-const formatArtistsToArray = (data, filterBy) => {
-  if (!data.length) return [];
-  let formattedArtists;
-  if (filterBy === 'top_artists') {
-    formattedArtists = data.map(({ name }) => name);
-  } else {
-    formattedArtists = [];
-    data.forEach(({ track }) => {
-      track.artists.forEach(artist => {
-        formattedArtists.push(artist.name);
-      });
-    });
-  }
-
-  return formattedArtists;
-};
-
-const parseSeatGeekEvents = event => {
+const parseSeatGeekEvents = (event) => {
   return {
     id: event.id,
     title: event.title,
@@ -92,9 +83,9 @@ const parseSeatGeekEvents = event => {
       zipcode: event.venue.postal_code,
       coordinates: {
         lat: event.venue.location.lat,
-        lon: event.venue.location.lon
-      }
-    }
+        lon: event.venue.location.lon,
+      },
+    },
   };
 };
 
@@ -105,7 +96,6 @@ const format = {
   dbLibraryToCache,
   verifyJWT,
   parseSeatGeekEvents,
-  formatArtistsToArray
 };
 
 module.exports = format;

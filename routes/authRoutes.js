@@ -4,7 +4,7 @@ const authController = require('../controllers/authController');
 const { getTokens, spotifyFetch } = require('../services/spotifyService');
 const ServerError = require('../ServerError');
 const { catchAsyncError } = require('./middleware/errorMiddleware');
-const cache = require('../cache');
+const { cache } = require('../cache');
 const format = require('../utils/format');
 
 router.get(
@@ -17,13 +17,13 @@ router.get(
     console.log('***************NOW IN /spotifyLogin ROUTE');
     const redirectURI = `${process.env.FRONTEND_HOST}/api/auth/spotify_login`;
     console.log('REDIRECT URI: ', redirectURI);
-    const code = req.query.code;
+    const code = req.query && req.query.code;
     if (!code) throw new ServerError('/token', 401, 'Missing Spotify Code');
 
     const params = {
       code,
       redirect_uri: redirectURI,
-      grant_type: 'authorization_code'
+      grant_type: 'authorization_code',
     };
     const userTokens = await getTokens(params);
     //* TODO: total songs info needs to be retrieved from database
@@ -36,12 +36,12 @@ router.get(
     const userInfo = {
       spotifyID: profile.id,
       displayName: profile.display_name,
-      imgURL: profile.images[0].url
+      imgURL: (profile.images[0] && profile.images[0].url) || '',
     };
 
     // SAVE ENCODED TOKEN TO COOKIE ***********
     const encodedToken = await jwt.sign({ userInfo }, process.env.JWT_SECRET_KEY, {
-      expiresIn: '999d'
+      expiresIn: '999d',
     });
     res.json({ encodedToken });
     // FORMATTING DATA FOR DB ENTRY/CACHE***********
@@ -68,10 +68,10 @@ router.get('/', (req, res) => {
   if (!spotifyID) return res.json({ spotifyID: '', displayName: '', imgURL: '' });
   const cachedUser = cache.get(spotifyID);
   const { displayName, imgURL } = cachedUser;
-  res.json({
+  return res.json({
     spotifyID,
     displayName,
-    imgURL
+    imgURL,
   });
 });
 

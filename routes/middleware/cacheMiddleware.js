@@ -1,23 +1,18 @@
 const authController = require('../../controllers/authController');
-const cache = require('../../cache');
+const { cache } = require('../../cache');
 const format = require('../../utils/format');
 const { catchAsyncError } = require('./errorMiddleware');
+const { getUserLibrary } = require('../../controllers/userLibraryController');
 
 const cacheMiddleware = catchAsyncError(async (req, res, next) => {
   /** ****************************************************
-   * MIDDLEWARE RESPONSIBILITIES
+   *  RESPONSIBILITIES
    * - Bring update user recency in cache.
-   * - If user not in cache, bring into cache from database
-   *  -Get user info from authController
-   *
+   * - If user not in cache, set user in cache from database
    * **************************************************
    */
 
-  console.log('************MAIN MIDDLEWARE HIT');
-
-  /** *********************************************
-   * UPDATE CACHE FROM DATABASE IF USER NOT IN CACHE
-   ************************************************ */
+  console.log('Updating user in cache...');
 
   const { spotifyID = null } = res.locals;
   if (!spotifyID) return next();
@@ -28,6 +23,8 @@ const cacheMiddleware = catchAsyncError(async (req, res, next) => {
     const userFromDatabase = await authController.getUserByID(spotifyID);
     cachedUser = cache.set(spotifyID, format.dbProfileToCache(userFromDatabase));
   }
+  const userLibrary = await getUserLibrary(spotifyID);
+  if (userLibrary.length) cache.setLibrary(spotifyID, format.dbLibraryToCache(userLibrary));
   return next();
 });
 
