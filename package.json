@@ -38,11 +38,6 @@
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
-<<<<<<< HEAD
     "nodemon": "^1.19.1"
-=======
-    "nodemon": "^1.19.1",
-    "object-sizeof": "^1.5.1"
->>>>>>> master
   }
 }
