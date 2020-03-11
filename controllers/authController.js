@@ -2,11 +2,11 @@ const connection = require('../db');
 const ServerError = require('../ServerError');
 
 module.exports = {
-  getUserByID: spotifyID => {
+  getUserByID: (spotifyID) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user_info WHERE user_id = ?', [spotifyID], (err, data) => {
         console.log('*******GETTING USER:', spotifyID);
-        if (err) throw ServerError('Auth - getUserByID', 500, err);
+        if (err) throw new ServerError('Auth - getUserByID', 500, err);
         console.log('GET USER RAW DATA', data);
         if (data.length === 0) resolve(false);
         if (data.length > 1)
@@ -22,7 +22,7 @@ module.exports = {
     imgURL,
     refreshToken,
     accessToken,
-    accessTokenExpiration
+    accessTokenExpiration,
   }) => {
     connection.query(
       'UPDATE user_info SET display_name = ?, img_URL = ?, refresh_token = ?, access_token = ?, access_token_expiration = ? WHERE user_id = ?',
@@ -39,7 +39,7 @@ module.exports = {
     imgURL,
     refreshToken,
     accessToken,
-    accessTokenExpiration
+    accessTokenExpiration,
   }) => {
     connection.query(
       'INSERT INTO user_info (user_id, display_name, img_URL, refresh_token, access_token, access_token_expiration) VALUES (?,?,?,?,?,?)',
@@ -50,7 +50,7 @@ module.exports = {
       }
     );
   },
-  deleteUser: spotifyID => {
+  deleteUser: (spotifyID) => {
     connection.query('DELETE FROM user_info WHERE user_id = ?', [spotifyID], (err, data) => {
       if (err) throw new ServerError('Auth - deleteUser');
       console.log('IN DELETE USER,', data);
@@ -65,5 +65,5 @@ module.exports = {
         console.log('in edit user song total', newTotal, data);
       }
     );
-  }
+  },
 };
