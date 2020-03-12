@@ -3,7 +3,7 @@ CREATE DATABASE eventspotter_db;
 USE eventspotter_db;
 
 CREATE TABLE user_info (
-  user_id SERIAL PRIMARY KEY,
+  user_id VARCHAR(100) PRIMARY KEY,
   display_name VARCHAR(30) NOT NULL,
   img_URL VARCHAR(500),
   refresh_token VARCHAR(200) NOT NULL,
@@ -14,8 +14,7 @@ CREATE TABLE user_info (
 
 
 CREATE TABLE user_settings(
-  id SERIAL PRIMARY KEY,
-  user_id SERIAL,
+  user_id VARCHAR(100) PRIMARY KEY,
   zipcode SMALLINT,
   search_radius SMALLINT,
   show_acousticness BOOLEAN,
@@ -31,7 +30,7 @@ CREATE TABLE user_settings(
 );
 
 CREATE TABLE library(
-  song_id SERIAL PRIMARY KEY,
+  song_id VARCHAR(100) PRIMARY KEY,
   title VARCHAR(100),
   artist VARCHAR(200),
   album_img TEXT,
@@ -47,7 +46,7 @@ CREATE TABLE library(
   );
 
   CREATE TABLE UserLibrary(
-  user_id SERIAL,
+  user_id VARCHAR(100),
   song_id VARCHAR(100),
   added_at VARCHAR(100),
   PRIMARY KEY (user_id, song_id),

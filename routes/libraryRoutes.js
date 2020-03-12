@@ -45,7 +45,9 @@ router.route('/all').get(
       // If it's a new user, retrieve library from Spotify
       console.log('Library not found. Retreiving library from Spotify');
       await libraryService.fullUpdate(spotifyID, accessToken);
+
       const { library } = cache.get(spotifyID);
+      console.log('LIBRARY RETRIVED FROM DB');
       return res.json({ data: library });
       // }
     }

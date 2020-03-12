@@ -15,12 +15,11 @@ module.exports = {
   //     });
   //   }),
 
-  setLibrary: (library, features) => {
+  setLibrary: async (library, features) => {
     /**
      * library is an array of 50 or less songs from Spotify.
      * library = spotifyResp.items
      */
-
     const insertArray = library.map(({ track: { artists, name, id, album } }, i) => {
       artists = artists.reduce((acc, artist) => [...acc, artist.name], []).join(', ');
       return [
@@ -39,14 +38,34 @@ module.exports = {
         features[i].liveness,
       ];
     });
+    const query = Array(13)
+      .fill(1)
+      .map((item, i) => `$${i + 1}`)
+      .join(', ');
+
+    // insert array is 50 songs long
+    // each song is an array of values
     console.log('IN SET LIBRARY CONTROLLER');
-    connection.query(
-      'INSERT IGNORE INTO library (song_id, title, artist, album_img, acousticness, danceability, energy, instrumentalness, loudness, tempo, valence, speechiness, liveness) VALUES ?',
-      [insertArray],
-      (err, data) => {
-        if (err) throw new ServerError('Library - getSong failed', 500, err);
-        console.log('RETURNING FROM SET LIBRARY CONTROLLER', data[0], data.length);
-      }
-    );
+    try {
+      await Promise.all(
+        insertArray.map((song) => {
+          return connection.query(
+            `INSERT INTO library (song_id, title, artist, album_img, acousticness, danceability, energy, instrumentalness, loudness, tempo, valence, speechiness, liveness) VALUES (${query}) ON CONFLICT (song_id) DO NOTHING;`,
+            song
+          );
+        })
+      );
+    } catch (e) {
+      if (e) throw new ServerError('setLibrary error');
+    }
+
+    //   connection.query(
+    //     `INSERT INTO library (song_id, title, artist, album_img, acousticness, danceability, energy, instrumentalness, loudness, tempo, valence, speechiness, liveness) VALUES (${query}) ON CONFLICT (song_id) DO NOTHING;`,
+    //     [insertArray],
+    //     (err, data) => {
+    //       if (err) throw new ServerError('Library - setLibrary failed', 500, err);
+    //       console.log('RETURNING FROM SET LIBRARY CONTROLLER', data.rows[0], data.rows.length);
+    //     }
+    //   );
   },
 };
